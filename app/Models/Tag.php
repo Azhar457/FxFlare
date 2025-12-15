@@ -2,9 +2,22 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Post;
 
 class Tag extends Model
 {
-    //
+    use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'slug',
+    ];
+
+    //Tag memiliki banyak Post (M:N)
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'post_tags');
+    }
 }
