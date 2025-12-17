@@ -2,149 +2,45 @@
 
 namespace Database\Seeders;
 
-use App\Models\Tag;
-use App\Models\Like;
-use App\Models\Post;
-use App\Models\User;
-use App\Models\Comment;
 use App\Models\Category;
+use App\Models\Comment;
+use App\Models\Post;
+use App\Models\Role;
+use App\Models\Tag;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-            $this->call([
-            RoleSeeder::class,
-            UserSeeder::class,
-            CategorySeeder::class,
-            PostSeeder::class,
-            TagSeeder::class,
-            PostTagSeeder::class,
-            CommentSeeder::class,
-            LikeSeeder::class,
-        ]);
-    }
-}
-
-class RoleSeeder extends Seeder
-{
-    public function run(): void
-    {
-        DB::table('roles')->insert([
-            ['name' => 'admin'],
-            ['name' => 'user'],
-        ]);
-    }
-}
-
-class UserSeeder extends Seeder
-{
-    public function run(): void
-    {
-        User::create([
-            'role_id' => 1,
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password')
+        // 1. Buat Role Spesifik
+        $adminRole = Role::factory()->create(['name' => 'admin']);
+        $userRole = Role::factory()->create(['name' => 'user']);
+        
+        // 2. Buat 1 User Admin (untuk kamu login nanti)
+        User::factory()->create([
+            'name' => 'Azhar Admin',
+            'email' => 'admin@fxflare.com',
+            'password' => bcrypt('password'), // password default
+            'role_id' => $adminRole->id,
         ]);
 
-        User::factory(5)->create([
-            'role_id' => 2
-        ]);
-    }
-}
+        // 3. Buat beberapa Kategori & Tag
+        $categories = Category::factory(5)->create();
+        $tags = Tag::factory(10)->create();
 
-class CategorySeeder extends Seeder
-{
-    public function run(): void
-    {
-        Category::insert([
-            ['name' => 'Teknologi', 'slug' => 'teknologi'],
-            ['name' => 'Web', 'slug' => 'web'],
-            ['name' => 'Mobile', 'slug' => 'mobile'],
-        ]);
-    }
-}
+        // 4. Buat 20 Postingan Dummy
+        Post::factory(20)
+            ->recycle($users = User::factory(5)->create(['role_id' => $userRole->id])) // Pakai user yang baru dibuat
+            ->recycle($categories) // Pakai kategori yang sudah ada
+            ->create()
+            ->each(function ($post) use ($tags) {
+                // Attach tags secara acak ke setiap post
+                $post->tags()->attach($tags->random(rand(1, 3)));
+            });
 
-class PostSeeder extends Seeder
-{
-    public function run(): void
-    {
-        $users = User::all();
-        $categories = Category::all();
-
-        Post::factory(10)->make()->each(function ($post) use ($users, $categories) {
-            $post->user_id = $users->random()->id;
-            $post->category_id = $categories->random()->id;
-            $post->save();
-        });
-    }
-}
-
-class TagSeeder extends Seeder
-{
-    public function run(): void
-    {
-        Tag::insert([
-            ['name' => 'Laravel', 'slug' => 'laravel'],
-            ['name' => 'PHP', 'slug' => 'php'],
-            ['name' => 'Backend', 'slug' => 'backend'],
-            ['name' => 'Frontend', 'slug' => 'frontend'],
-        ]);
-    }
-}
-
-class PostTagSeeder extends Seeder
-{
-    public function run(): void
-    {
-        $tags = Tag::all();
-
-        Post::all()->each(function ($post) use ($tags) {
-            $post->tags()->attach(
-                $tags->random(2)->pluck('id')->toArray()
-            );
-        });
-    }
-}
-
-class CommentSeeder extends Seeder
-{
-    public function run(): void
-    {
-        $users = User::all();
-        $posts = Post::all();
-
-        foreach ($posts as $post) {
-            Comment::factory(2)->create([
-                'post_id' => $post->id,
-                'user_id' => $users->random()->id,
-            ]);
-        }
-    }
-}
-
-class LikeSeeder extends Seeder
-{
-    public function run(): void
-    {
-        $users = User::all();
-        $posts = Post::all();
-
-        foreach ($posts as $post) {
-            Like::create([
-                'post_id' => $post->id,
-                'user_id' => $users->random()->id,
-            ]);
-        }
+        // 5. Buat Komentar Dummy
+        Comment::factory(50)->recycle($users)->recycle(Post::all())->create();
     }
 }
