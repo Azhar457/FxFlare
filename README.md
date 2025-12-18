@@ -81,7 +81,7 @@ fxflare/
 
 ## 🛠 Tech Stack
 
-*   **Framework**: Laravel 10/11
+*   **Framework**: Laravel 12
 *   **Styling**: Tailwind CSS v4 (via Vite)
 *   **Interactivity**: Alpine.js
 *   **Asset Bundler**: Vite (Run `npm run dev` locally)
