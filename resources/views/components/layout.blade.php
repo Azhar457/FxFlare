@@ -30,9 +30,34 @@
             </div>
 
             <div>
-                <a href="/login"
-                    class="text-sm font-semibold hover:text-white transition px-4 py-2 rounded-lg hover:bg-gray-800">Sign
-                    In</a>
+                @auth
+                    <div class="relative group" x-data="{ open: false }">
+                        <button @click="open = !open" class="flex items-center gap-2 text-sm font-semibold hover:text-white transition px-4 py-2 rounded-lg hover:bg-gray-800">
+                            <span>{{ Auth::user()->name }}</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <!-- Dropdown -->
+                        <div x-show="open" 
+                             @click.away="open = false" 
+                             x-transition
+                             style="display: none;"
+                             class="absolute right-0 mt-2 w-48 bg-darkcard border border-gray-800 rounded-xl shadow-xl overflow-hidden z-50">
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Profile</a>
+                            <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Settings</a>
+                            <div class="border-t border-gray-800"></div>
+                            <form action="{{ route('logout') }}" method="POST">
+                                @csrf
+                                <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-800 hover:text-red-300">
+                                    Sign Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}"
+                        class="text-sm font-semibold hover:text-white transition px-4 py-2 rounded-lg hover:bg-gray-800">Sign
+                        In</a>
+                @endauth
             </div>
         </div>
     </nav>
