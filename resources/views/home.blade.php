@@ -16,25 +16,9 @@
 
         {{-- Section 4: Latest News (Carousel) --}}
         <section class="mb-16">
-            <div class="flex items-center justify-between mb-6">
-                <h2 class="text-2xl font-bold text-white">Latest Market News</h2>
-                <div class="flex space-x-2 text-sm">
-                    <button
-                        class="px-3 py-1 bg-gray-800 rounded-full text-white hover:bg-gray-700 transition">All</button>
-                    <button class="px-3 py-1 text-gray-400 hover:text-white transition">Forex</button>
-                    <button class="px-3 py-1 text-gray-400 hover:text-white transition">Crypto</button>
-                    <button class="px-3 py-1 text-gray-400 hover:text-white transition">Stocks</button>
-                </div>
-            </div>
+            <h2 class="text-2xl font-bold text-white mb-6">Latest Market News</h2>
             <x-carousel />
-            <div class="text-center mt-6">
-                <button
-                    class="text-accent hover:text-white transition font-medium text-sm flex items-center justify-center gap-2 mx-auto">
-                    Load More News <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                    </svg>
-                </button>
-            </div>
+
         </section>
 
         {{-- Section 5: Market Sentiment & Premium CTA --}}
