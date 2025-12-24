@@ -22,7 +22,7 @@
 
             <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
                 <a href="/" class="hover:text-white transition">Home</a>
-                <a href="#" class="hover:text-white transition">Markets</a>
+                <a href="{{ route('reports.index') }}" class="hover:text-white transition">Markets</a>
                 <a href="{{ route('news.index') }}" class="hover:text-white transition">News</a>
                 <a href="#" class="hover:text-white transition">Analysis</a>
                 <a href="#" class="hover:text-white transition">Watchlist</a>
