@@ -9,6 +9,7 @@ Route::get('/', function () {
 });
 
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{post:slug}', [NewsController::class, 'show'])->name('news.show');
 
 // Auth Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -18,6 +19,11 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Admin Routes
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('posts', \App\Http\Controllers\PostController::class);
+});
 
 Route::get('/home', function () {
     return view('home');
