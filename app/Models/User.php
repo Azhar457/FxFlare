@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
+//use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -13,11 +13,8 @@ use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
 
-class User extends Authenticatable
-{
-    // @use HasFactory<\Database\Factories\UserFactory>
+class User extends Authenticatable {
     use HasFactory, Notifiable;
-
 
     protected $fillable = [
         'role_id',
@@ -26,42 +23,35 @@ class User extends Authenticatable
         'password',
     ];
 
-
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-
-    protected function casts(): array
-    {
+    protected function casts(): array {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed',
+            'password' => 'hashed', //Memastikan password selalu di-hash otomatis
         ];
     }
 
-    // User -> Role (Many to One)
-    public function role()
-    {
+    public function hasRole(string $roleName): bool {
+        return $this->role && $this->role->name === $roleName;
+    }
+
+    public function role() {
         return $this->belongsTo(Role::class);
     }
 
-    // User -> Posts (One to Many)
-    public function posts()
-    {
+    public function posts() {
         return $this->hasMany(Post::class);
     }
 
-    // User -> Comments (One to Many)
-    public function comments()
-    {
+    public function comments() {
         return $this->hasMany(Comment::class);
     }
 
-    // User -> Likes (One to Many)
-    public function likes()
-    {
+    public function likes() {
         return $this->hasMany(Like::class);
     }
 }
