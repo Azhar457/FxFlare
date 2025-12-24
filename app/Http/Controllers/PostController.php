@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +50,8 @@ class PostController extends Controller
             abort(403);
         }
         $categories = Category::all();
-        return view('posts.create', compact('categories'));
+        $tags = Tag::all();
+        return view('posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -67,6 +69,8 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:draft,published',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $data = $request->only(['title', 'content', 'category_id', 'status']);
@@ -82,7 +86,11 @@ class PostController extends Controller
             $data['thumbnail'] = $request->file('thumbnail')->store('posts', 'public'); // Requires storage link
         }
 
-        Post::create($data);
+        $post = Post::create($data);
+
+        if ($request->has('tags')) {
+            $post->tags()->sync($request->tags);
+        }
 
         return redirect()->route('admin.posts.index')->with('success', 'Post created successfully!');
     }
@@ -108,7 +116,8 @@ class PostController extends Controller
             abort(403);
         }
         $categories = Category::all();
-        return view('posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -126,6 +135,8 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'status' => 'required|in:draft,published',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
         ]);
 
         $data = $request->only(['title', 'content', 'category_id', 'status']);
@@ -148,6 +159,12 @@ class PostController extends Controller
         }
 
         $post->update($data);
+
+        if ($request->has('tags')) {
+            $post->tags()->sync($request->tags);
+        } else {
+            $post->tags()->detach();
+        }
 
         return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully!');
     }
