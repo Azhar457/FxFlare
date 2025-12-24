@@ -7,25 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Post;
 
-class Comment extends Model
-{
+class Comment extends Model {
     use HasFactory;
 
     protected $fillable = [
         'user_id',
         'post_id',
-        'comment',
+        'content',
     ];
 
-    //Comment dimiliki oleh satu User
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
-    //Comment dimiliki oleh satu Post
-    public function post()
-    {
+    public function post() {
         return $this->belongsTo(Post::class);
     }
 }
