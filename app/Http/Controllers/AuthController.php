@@ -8,16 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
-class AuthController extends Controller
-{
-    //LOGIN
-    public function showLoginForm()
-    {
+class AuthController extends Controller {
+    //login//
+    public function showLoginForm() {
         return view('auth.login');
     }
 
-    public function login(Request $request)
-    {
+    public function login(Request $request) {
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
@@ -33,21 +30,19 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    //REGISTER
-    public function showRegisterForm()
-    {
+    //register//
+    public function showRegisterForm() {
         return view('auth.register');
     }
 
-    public function register(Request $request)
-    {
+    public function register(Request $request) {
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
         ]);
 
-        //Cari Role 'User' (Pastikan Seeder Role sudah dijalankan)
+        //Cari Role 'User'
         $role = Role::where('name', 'User')->first();
         $roleId = $role ? $role->id : 2; // Fallback ID jika query gagal
 
@@ -61,9 +56,8 @@ class AuthController extends Controller
         return redirect()->route('login')->with('success', 'Registrasi berhasil, silakan login.');
     }
 
-    //LOGOUT
-    public function logout(Request $request)
-    {
+    //logout//
+    public function logout(Request $request) {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();

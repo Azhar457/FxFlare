@@ -4,6 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\NewsController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\ProfileController;
+
 Route::get('/', function () {
     return view('home');
 });
@@ -29,6 +32,14 @@ Route::get('/home', function () {
     return view('home');
 });
 
+// Admin Routes
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('users', UserController::class);
+});
+
+// Profile Routes
+Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
 // Market Report & PDF
 Route::get('/market-report', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 Route::get('/market-report/pdf', [App\Http\Controllers\ReportController::class, 'generatePdf'])->name('reports.pdf');

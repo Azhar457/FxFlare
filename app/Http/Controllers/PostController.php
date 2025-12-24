@@ -17,7 +17,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         // Ensure Admin
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -102,7 +102,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        // Pastikan hanya pemilik atau admin yang bisa edit
+        if (Auth::id() !== $post->user_id && Auth::user()->role->name !== 'admin') {
             abort(403);
         }
         $categories = Category::all();
@@ -150,7 +151,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::id() !== $post->user_id && Auth::user()->role->name !== 'admin') {
             abort(403);
         }
 
