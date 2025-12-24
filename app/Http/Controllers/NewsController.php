@@ -20,7 +20,7 @@ class NewsController extends Controller
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('content', 'like', "%{$search}%");
+                  ->orWhere('content', 'like', "%{$search}%"); // changed from body to content
             });
         }
 
@@ -41,9 +41,20 @@ class NewsController extends Controller
         }
 
         $posts = $query->paginate(9)->withQueryString();
+        
+        if ($request->ajax()) {
+            return view('news.partials.list', compact('posts'))->render();
+        }
+
         $categories = Category::withCount('posts')->get(); // Get categories with post count
         $tags = Tag::all();
 
         return view('news', compact('posts', 'categories', 'tags'));
+    }
+
+    public function show(Post $post)
+    {
+        // Increase view count or other logic if needed
+        return view('news.show', compact('post'));
     }
 }
