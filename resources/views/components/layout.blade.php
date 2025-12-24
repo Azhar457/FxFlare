@@ -45,6 +45,11 @@
                             <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Profile</a>
                             <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Settings</a>
                             <div class="border-t border-gray-800"></div>
+                            @if(Auth::user()->role->name === 'admin')
+                                <a href="{{ route('admin.categories.index') }}" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Categories</a>
+                                <a href="{{ route('admin.tags.index') }}" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Tags</a>
+                                <div class="border-t border-gray-800"></div>
+                            @endif
                             <form action="{{ route('logout') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-800 hover:text-red-300">
