@@ -21,7 +21,7 @@
                     <div class="flex items-center gap-2 text-xs text-silver mb-3">
                         <span>{{ $post->published_at ? $post->published_at->format('M d, Y') : 'Draft' }}</span>
                         <span>•</span>
-                        <span>{{ $post->user->name ?? 'Admin' }}</span>
+                        <span>{{ $post->user->name ?? 'admin' }}</span>
                     </div>
                     <h2 class="text-xl font-bold text-white mb-3 leading-tight group-hover:text-accent transition">
                         <a href="{{ route('news.show', $post->slug) }}">{{ $post->title }}</a>

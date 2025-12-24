@@ -12,7 +12,8 @@ class NewsController extends Controller
     public function index(Request $request)
     {
         $query = Post::with(['category', 'tags', 'user'])
-            ->whereNotNull('published_at') // Assuming we only show published posts
+            ->where('status', 'published') // Explicit status check
+            ->whereNotNull('published_at') 
             ->latest('published_at');
 
         // Search Filter

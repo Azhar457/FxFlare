@@ -16,8 +16,8 @@ class PostController extends Controller
      */
     public function index(Request $request)
     {
-        // Ensure Admin
-        if (Auth::user()->role->name !== 'Admin') {
+        // Ensure admin
+        if (Auth::user()->role->name !== 'admin') {
             abort(403, 'Unauthorized action.');
         }
 
@@ -45,7 +45,7 @@ class PostController extends Controller
      */
     public function create()
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403);
         }
         $categories = Category::all();
@@ -57,7 +57,7 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403);
         }
 
@@ -73,7 +73,8 @@ class PostController extends Controller
         $data['slug'] = Str::slug($request->title) . '-' . Str::random(5);
         $data['user_id'] = Auth::id();
         
-        if ($request->has('published_at') && $request->status == 'published') {
+        // Fix: Auto-set published_at if status is published
+        if ($request->status == 'published') {
             $data['published_at'] = now();
         }
 
@@ -91,7 +92,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403);
         }
         return view('posts.show', compact('post'));
@@ -102,7 +103,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403);
         }
         $categories = Category::all();
@@ -114,7 +115,7 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403);
         }
 
@@ -131,6 +132,11 @@ class PostController extends Controller
         // Update slug only if title changes significantly (optional, but good for SEO vs links breaking)
         if ($request->title !== $post->title) {
             $data['slug'] = Str::slug($request->title) . '-' . Str::random(5);
+        }
+
+        // Fix: Set published_at if becoming published and not set previously
+        if ($request->status == 'published' && is_null($post->published_at)) {
+            $data['published_at'] = now();
         }
 
         if ($request->hasFile('thumbnail')) {
@@ -150,7 +156,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        if (Auth::user()->role->name !== 'Admin') {
+        if (Auth::user()->role->name !== 'admin') {
             abort(403);
         }
 

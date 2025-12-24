@@ -27,7 +27,7 @@
                     {{ substr($post->user->name ?? 'A', 0, 1) }}
                 </div>
                 <div>
-                    <div class="text-white font-medium">{{ $post->user->name ?? 'Admin' }}</div>
+                    <div class="text-white font-medium">{{ $post->user->name ?? 'admin' }}</div>
                     <div class="text-xs text-gray-500">Author</div>
                 </div>
             </div>
