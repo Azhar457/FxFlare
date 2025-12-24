@@ -40,6 +40,18 @@
                     @error('category_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
+                <!-- Tags -->
+                <div>
+                    <label for="tags" class="block text-sm font-medium text-gray-400 mb-2">Tags</label>
+                    <select name="tags[]" id="tags" multiple
+                        class="w-full bg-darkbg border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition h-32">
+                        @foreach($tags as $tag)
+                            <option value="{{ $tag->id }}" {{ (collect(old('tags', $post->tags->pluck('id')->toArray()))->contains($tag->id)) ? 'selected' : '' }}>{{ $tag->name }}</option>
+                        @endforeach
+                    </select>
+                    @error('tags') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
+                </div>
+
                 <!-- Content -->
                 <div>
                     <label for="content" class="block text-sm font-medium text-gray-400 mb-2">Content</label>
