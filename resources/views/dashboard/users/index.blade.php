@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Manage Users | FXFLARE
     </x-slot:title>
@@ -39,4 +39,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-dashboard-layout>

@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Manage Posts | FXFLARE
     </x-slot:title>
@@ -86,4 +86,4 @@
             }, 300);
         });
     </script>
-</x-layout>
+</x-dashboard-layout>

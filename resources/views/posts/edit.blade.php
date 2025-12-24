@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Edit: {{ $post->title }} | FXFLARE
     </x-slot:title>
@@ -94,4 +94,4 @@
             </form>
         </div>
     </div>
-</x-layout>
+</x-dashboard-layout>

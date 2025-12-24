@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Edit User | FXFLARE
     </x-slot:title>
@@ -60,4 +60,4 @@
             </form>
         </div>
     </div>
-</x-layout>
+</x-dashboard-layout>
