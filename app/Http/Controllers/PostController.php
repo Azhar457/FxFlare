@@ -81,7 +81,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         // Pastikan hanya pemilik atau admin yang bisa edit
-        if (Auth::id() !== $post->user_id && Auth::user()->role->name !== 'Admin') {
+        if (Auth::id() !== $post->user_id && Auth::user()->role->name !== 'admin') {
             abort(403);
         }
 
@@ -118,7 +118,7 @@ class PostController extends Controller
 
     public function destroy(Post $post)
     {
-        if (Auth::id() !== $post->user_id && Auth::user()->role->name !== 'Admin') {
+        if (Auth::id() !== $post->user_id && Auth::user()->role->name !== 'admin') {
             abort(403);
         }
 
