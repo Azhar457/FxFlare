@@ -38,6 +38,7 @@ Route::get('/home', function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('tags', \App\Http\Controllers\Admin\TagController::class);
+    Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 });
 
 // Profile Routes
