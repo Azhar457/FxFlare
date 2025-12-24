@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Post;
 use App\Models\Tag;
 
-class PostTag extends Model
-{
+class PostTag extends Model {
     use HasFactory;
 
     protected $table = 'post_tags';
@@ -18,15 +17,11 @@ class PostTag extends Model
         'tag_id',
     ];
 
-    //PostTag dimiliki oleh satu Post
-    public function post()
-    {
+    public function post() {
         return $this->belongsTo(Post::class);
     }
 
-    //PostTag dimiliki oleh satu Tag
-    public function tag()
-    {
+    public function tag() {
         return $this->belongsTo(Tag::class);
     }
 }

@@ -5,15 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-// Import model
+//Import model//
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Tag;
 use App\Models\Comment;
 use App\Models\Like;
 
-class Post extends Model
-{
+class Post extends Model {
     use HasFactory;
 
     protected $fillable = [
@@ -27,38 +26,28 @@ class Post extends Model
         'published_at',
     ];
 
-    //Casting tipe data
     protected $casts = [
         'published_at' => 'datetime',
     ];
 
-    // Post dimiliki oleh satu User
-    public function user()
-    {
+    public function user() {
         return $this->belongsTo(User::class);
     }
 
-    // Post dimiliki oleh satu Category
-    public function category()
-    {
+    public function category() {
         return $this->belongsTo(Category::class);
     }
 
-    // Post memiliki banyak Tag (M:N)
-    public function tags()
-    {
-        return $this->belongsToMany(Tag::class, 'post_tags');
+    public function tags() {
+        return $this->belongsToMany(Tag::class);
     }
 
-    // Post memiliki banyak Comment
-    public function comments()
-    {
+    public function comments() {
         return $this->hasMany(Comment::class);
     }
 
-    // Post memiliki banyak Like
-    public function likes()
-    {
+    public function likes() {
         return $this->hasMany(Like::class);
     }
+    
 }
