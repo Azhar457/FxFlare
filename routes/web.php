@@ -22,3 +22,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/home', function () {
     return view('home');
 });
+
+// Market Report & PDF
+Route::get('/market-report', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
+Route::get('/market-report/pdf', [App\Http\Controllers\ReportController::class, 'generatePdf'])->name('reports.pdf');
