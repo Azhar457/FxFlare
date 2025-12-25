@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Manage Tags | FXFLARE
     </x-slot:title>
@@ -57,4 +57,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-dashboard-layout>

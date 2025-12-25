@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Edit Category | FXFLARE
     </x-slot:title>
@@ -32,4 +32,4 @@
             </form>
         </div>
     </div>
-</x-layout>
+</x-dashboard-layout>

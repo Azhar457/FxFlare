@@ -36,6 +36,7 @@ Route::get('/home', function () {
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('index');
     Route::resource('users', UserController::class);
     Route::resource('tags', \App\Http\Controllers\Admin\TagController::class);
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);

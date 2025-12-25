@@ -1,4 +1,4 @@
-<x-layout>
+<x-dashboard-layout>
     <x-slot:title>
         Manage Users | FXFLARE
     </x-slot:title>
@@ -24,13 +24,7 @@
                     placeholder="Search users by name or email..." 
                     class="w-full bg-darkbg border border-gray-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
                     x-model="search"
-                    @input.debounce.500ms="
-                        fetch('{{ route('admin.users.index') }}?search=' + search, {
-                            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-                        })
-                        .then(res => res.text())
-                        .then(html => $refs.usersTable.innerHTML = html)
-                    "
+
                 >
             </div>
 
@@ -39,4 +33,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-dashboard-layout>
