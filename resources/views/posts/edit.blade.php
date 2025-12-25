@@ -100,10 +100,10 @@
                     <!-- Dropdown -->
                     <div x-show="open && filteredItems.length > 0" 
                          x-transition.origin.top
-                         class="absolute z-10 w-full bg-darkcard border border-gray-700 rounded-lg mt-1 shadow-xl max-h-60 overflow-y-auto">
+                         class="absolute z-50 w-full bg-gray-900 border border-gray-700 rounded-lg mt-1 shadow-xl max-h-60 overflow-y-auto">
                         <template x-for="item in filteredItems" :key="item.id">
                             <div @click="add(item.id)" 
-                                 class="px-4 py-2 hover:bg-gray-700 cursor-pointer text-gray-300 hover:text-white transition">
+                                 class="px-4 py-2 hover:bg-gray-800 cursor-pointer text-gray-300 hover:text-white transition">
                                 <span x-text="item.name"></span>
                             </div>
                         </template>
