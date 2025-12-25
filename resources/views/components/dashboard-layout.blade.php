@@ -21,6 +21,12 @@
             </div>
 
             <nav class="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
+                <a href="{{ route('admin.index') }}" 
+                   class="flex items-center px-4 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.index') ? 'bg-accent text-white' : 'text-gray-400 hover:bg-gray-700 hover:text-white' }} mb-4">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Dashboard
+                </a>
+
                 <p class="px-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">Management</p>
                 
                 <a href="{{ route('admin.posts.index') }}" 
