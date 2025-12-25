@@ -13,13 +13,15 @@
 <body class="bg-darkbg text-white font-sans antialiased selection:bg-accent selection:text-white">
 
     <!-- NAVBAR -->
-    <nav class="border-b border-gray-800 bg-darkbg/80 backdrop-blur-md sticky top-0 z-50">
+    <!-- NAVBAR -->
+    <nav class="border-b border-gray-800 bg-darkbg/80 backdrop-blur-md sticky top-0 z-50" x-data="{ mobileOpen: false }">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
             <span class="text-xl font-bold tracking-wide text-white">
                 FXFLARE <span
                     class="text-xs font-normal text-accent ml-1 uppercase tracking-widest border border-accent rounded px-1">AI-Powered</span>
             </span>
 
+            <!-- Desktop Menu -->
             <div class="hidden md:flex space-x-8 text-sm font-medium text-gray-400">
                 <a href="/" class="hover:text-white transition">Home</a>
                 <a href="{{ route('reports.index') }}" class="hover:text-white transition">Markets</a>
@@ -29,7 +31,8 @@
                 <a href="#" class="hover:text-white transition text-accent">Premium</a>
             </div>
 
-            <div>
+            <!-- Desktop Right Side (User/Auth) -->
+            <div class="hidden md:block">
                 @auth
                     <div class="relative group" x-data="{ open: false }">
                         <button @click="open = !open" class="flex items-center gap-2 text-sm font-semibold hover:text-white transition px-4 py-2 rounded-lg hover:bg-gray-800">
@@ -59,6 +62,47 @@
                     <a href="{{ route('login') }}"
                         class="text-sm font-semibold hover:text-white transition px-4 py-2 rounded-lg hover:bg-gray-800">Sign
                         In</a>
+                @endauth
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button @click="mobileOpen = !mobileOpen" class="md:hidden text-gray-400 hover:text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path x-show="!mobileOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    <path x-show="mobileOpen" style="display: none;" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div x-show="mobileOpen" 
+             x-transition 
+             style="display: none;"
+             class="md:hidden bg-darkcard border-t border-gray-800">
+            <div class="px-4 py-4 space-y-2">
+                <a href="/" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Home</a>
+                <a href="{{ route('reports.index') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Markets</a>
+                <a href="{{ route('news.index') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">News</a>
+                <a href="#" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Analysis</a>
+                <a href="#" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Watchlist</a>
+                <a href="#" class="block px-4 py-2 text-base font-medium text-accent hover:text-white hover:bg-gray-800 rounded-lg">Premium</a>
+                
+                @auth
+                    <div class="border-t border-gray-700 my-2"></div>
+                    <div class="px-4 py-2 text-sm text-gray-500">Logged in as {{ Auth::user()->name }}</div>
+                    <a href="profile" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Profile</a>
+                    @if(Auth::user()->role->name === 'admin')
+                        <a href="{{ route('admin.index') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Dashboard</a>
+                    @endif
+                    <form action="{{ route('logout') }}" method="POST">
+                        @csrf
+                        <button type="submit" class="block w-full text-left px-4 py-2 text-base font-medium text-red-400 hover:text-red-300 hover:bg-gray-800 rounded-lg">
+                            Sign Out
+                        </button>
+                    </form>
+                @else
+                    <div class="border-t border-gray-700 my-2"></div>
+                    <a href="{{ route('login') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Sign In</a>
                 @endauth
             </div>
         </div>
