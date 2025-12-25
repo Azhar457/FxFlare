@@ -23,6 +23,14 @@ class CommentController extends Controller
             'parent_id' => $request->parent_id
         ]);
 
+        if ($request->wantsJson()) {
+            return response()->json([
+                'message' => 'Comment added successfully',
+                'html' => view('news.partials.comment-item', ['comment' => $comment])->render(),
+                'count' => $post->comments()->count()
+            ]);
+        }
+
         FlashNotification::success('Komentar berhasil ditambahkan!', 'Sukses');
 
         return back();
@@ -36,6 +44,13 @@ class CommentController extends Controller
         }
 
         $comment->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                'message' => 'Comment deleted successfully',
+                'count' => $comment->post->comments()->count()
+            ]);
+        }
 
         FlashNotification::success('Komentar berhasil dihapus.', 'Dihapus');
 

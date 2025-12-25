@@ -55,7 +55,7 @@ class NewsController extends Controller
 
     public function show(Post $post)
     {
-        // Increase view count or other logic if needed
+        $post->load(['comments.user', 'likes']);
         return view('news.show', compact('post'));
     }
 }

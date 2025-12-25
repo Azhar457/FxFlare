@@ -39,15 +39,80 @@
                     @error('category_id') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
-                <!-- Tags -->
-                <div>
-                    <label for="tags" class="block text-sm font-medium text-gray-400 mb-2">Tags</label>
-                    <select name="tags[]" id="tags" multiple
-                        class="w-full bg-darkbg border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition h-32">
-                        @foreach($tags as $tag)
-                            <option value="{{ $tag->id }}" {{ (collect(old('tags'))->contains($tag->id)) ? 'selected' : '' }}>{{ $tag->name }}</option>
-                        @endforeach
-                    </select>
+                <!-- Tags (Multi-Select) -->
+                <div x-data="{
+                    open: false,
+                    search: '',
+                    selected: {{ json_encode(collect(old('tags', []))->map(fn($i) => (int)$i)->values()) }},
+                    items: {{ json_encode($tags->map(fn($t) => ['id' => $t->id, 'name' => $t->name])) }},
+                    get filteredItems() {
+                         return this.items.filter(i => 
+                            i.name.toLowerCase().includes(this.search.toLowerCase()) && 
+                            !this.selected.includes(i.id)
+                        );
+                    },
+                    get selectedItems() {
+                        return this.items.filter(i => this.selected.includes(i.id));
+                    },
+                    add(id) {
+                        if (!this.selected.includes(id)) {
+                            this.selected.push(id);
+                            this.search = '';
+                            this.open = false; 
+                        }
+                    },
+                    remove(id) {
+                        this.selected = this.selected.filter(i => i !== id);
+                    }
+                }" class="relative">
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Tags</label>
+                    
+                    <!-- Hidden Valid Select for Form Submission (Dynamic) -->
+                    <template x-for="id in selected" :key="id">
+                        <input type="hidden" name="tags[]" :value="id">
+                    </template>
+
+                    <!-- Custom Input Area -->
+                    <div @click="open = true; $nextTick(() => $refs.searchInput.focus())" @click.away="open = false"
+                         class="w-full bg-darkbg border border-gray-700 rounded-lg px-4 py-3 min-h-[50px] flex flex-wrap gap-2 items-center cursor-text focus-within:border-accent transition">
+                        
+                        <!-- Selected Pills -->
+                        <template x-for="item in selectedItems" :key="item.id">
+                            <span class="bg-accent/20 text-accent border border-accent/50 rounded-full px-3 py-1 text-sm flex items-center gap-1">
+                                <span x-text="item.name"></span>
+                                <button type="button" @click.stop="remove(item.id)" class="hover:text-white transition">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </span>
+                        </template>
+
+                        <!-- Search Input -->
+                        <input x-ref="searchInput" x-model="search" 
+                               @keydown.escape="open = false"
+                               @keydown.enter.prevent="if(filteredItems.length > 0) add(filteredItems[0].id)"
+                               placeholder="Select tags..." 
+                               class="bg-transparent border-none text-white focus:ring-0 p-0 text-sm flex-grow min-w-[100px] placeholder-gray-500">
+                    </div>
+
+                    <!-- Dropdown -->
+                    <div x-show="open && filteredItems.length > 0" 
+                         x-transition.origin.top
+                         class="absolute z-10 w-full bg-darkcard border border-gray-700 rounded-lg mt-1 shadow-xl max-h-60 overflow-y-auto">
+                        <template x-for="item in filteredItems" :key="item.id">
+                            <div @click="add(item.id)" 
+                                 class="px-4 py-2 hover:bg-gray-700 cursor-pointer text-gray-300 hover:text-white transition">
+                                <span x-text="item.name"></span>
+                            </div>
+                        </template>
+                    </div>
+                    
+                    <!-- No Results -->
+                    <div x-show="open && filteredItems.length === 0" class="absolute z-10 w-full bg-darkcard border border-gray-700 rounded-lg mt-1 shadow-xl p-4 text-gray-500 text-center text-sm">
+                        No tags found.
+                    </div>
+
                     @error('tags') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>
 
