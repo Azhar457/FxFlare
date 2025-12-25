@@ -47,6 +47,31 @@ class MarketDataService
         });
     }
 
+    /**
+     * Search for coins.
+     */
+    public function search(string $query)
+    {
+        return Cache::remember('market_search_' . $query, 300, function () use ($query) {
+            try {
+                $response = Http::timeout(10)
+                    ->withHeaders(['Accept' => 'application/json'])
+                    ->withoutVerifying()
+                    ->get("{$this->baseUrl}/search", [
+                        'query' => $query
+                    ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    return $data['coins'] ?? []; 
+                }
+                return [];
+            } catch (\Exception $e) {
+                return [];
+            }
+        });
+    }
+
     private function getFallbackData()
     {
         return [
