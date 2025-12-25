@@ -18,7 +18,10 @@ class DashboardController extends Controller
             'users' => User::count(),
             'categories' => Category::count(),
             'tags' => Tag::count(),
+            'comments' => \App\Models\Comment::count(),
+            'likes' => \App\Models\Like::count(),
         ];
+
         
         $latestPosts = Post::with('user', 'category')->latest()->take(5)->get();
         $latestUsers = User::latest()->take(5)->get();
