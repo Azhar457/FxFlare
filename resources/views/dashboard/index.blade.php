@@ -65,6 +65,38 @@
             </div>
         </div>
 
+        <!-- NEW STATS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Comments Stats -->
+            <div class="bg-darkcard border border-gray-800 rounded-xl p-6 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 text-sm uppercase font-bold tracking-wider">Total Comments</h3>
+                    <div class="p-2 bg-teal-500/10 rounded-lg">
+                        <svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path></svg>
+                    </div>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-white">{{ $stats['comments'] }}</span>
+                    <span class="text-sm text-gray-500">Global</span>
+                </div>
+            </div>
+
+            <!-- Likes Stats -->
+            <div class="bg-darkcard border border-gray-800 rounded-xl p-6 shadow-lg">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-gray-400 text-sm uppercase font-bold tracking-wider">Total Likes</h3>
+                    <div class="p-2 bg-red-500/10 rounded-lg">
+                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-3xl font-bold text-white">{{ $stats['likes'] }}</span>
+                    <span class="text-sm text-gray-500">Across posts</span>
+                </div>
+            </div>
+        </div>
+
+
         <!-- Recent Activity -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <!-- Latest Posts -->
