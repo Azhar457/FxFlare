@@ -12,6 +12,66 @@
 
 <body class="bg-darkbg text-white font-sans antialiased selection:bg-accent selection:text-white">
 
+    <!-- Toast Notification -->
+    @if(session('notification') || session('success') || session('error'))
+        @php
+            $notify = session('notification') ?? [
+                'type' => session('error') ? 'error' : 'success',
+                'title' => session('error') ? 'Error' : 'Success',
+                'message' => session('error') ?? session('success')
+            ];
+            $colors = [
+                'success' => 'bg-green-500/10 border-green-500/50 text-green-400',
+                'error' => 'bg-red-500/10 border-red-500/50 text-red-400',
+                'warning' => 'bg-yellow-500/10 border-yellow-500/50 text-yellow-400',
+                'info' => 'bg-blue-500/10 border-blue-500/50 text-blue-400',
+            ];
+            $biIcons = [
+                'success' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />',
+                'error' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />',
+                'warning' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />',
+                'info' => '<path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />'
+            ];
+            $type = $notify['type'] ?? 'info';
+            $style = $colors[$type] ?? $colors['info'];
+            $icon = $biIcons[$type] ?? $biIcons['info'];
+        @endphp
+        <div x-data="{ show: true }" 
+             x-show="show" 
+             x-init="setTimeout(() => show = false, 5000)"
+             x-transition:enter="transform ease-out duration-300 transition"
+             x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+             x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+             x-transition:leave="transition ease-in duration-100"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed top-24 right-5 z-50 w-full max-w-sm overflow-hidden rounded-lg shadow-lg border backdrop-blur-md {{ $style }}"
+             role="alert">
+            <div class="p-4">
+                <div class="flex items-start">
+                    <div class="flex-shrink-0">
+                        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                            {!! $icon !!}
+                        </svg>
+                    </div>
+                    <div class="ml-3 w-0 flex-1 pt-0.5">
+                        <p class="text-sm font-medium">{{ $notify['title'] }}</p>
+                        <p class="mt-1 text-sm opacity-90">{{ $notify['message'] }}</p>
+                    </div>
+                    <div class="ml-4 flex flex-shrink-0">
+                        <button @click="show = false" type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-500 hover:bg-white/10">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     <!-- NAVBAR -->
     <nav class="border-b border-gray-800 bg-darkbg/80 backdrop-blur-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
