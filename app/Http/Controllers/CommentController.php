@@ -45,6 +45,13 @@ class CommentController extends Controller
 
         $comment->delete();
 
+        if (request()->wantsJson()) {
+            return response()->json([
+                'message' => 'Comment deleted successfully',
+                'count' => $comment->post->comments()->count()
+            ]);
+        }
+
         FlashNotification::success('Komentar berhasil dihapus.', 'Dihapus');
 
         return back();

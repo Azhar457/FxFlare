@@ -125,9 +125,62 @@
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = data.html;
                     document.getElementById('comments-container').prepend(tempDiv.firstElementChild);
+                    
+                    window.dispatchEvent(new CustomEvent('notify', { 
+                        detail: { 
+                            type: 'success', 
+                            title: 'Success', 
+                            message: data.message 
+                        } 
+                    }));
                 })
-                .catch(err => console.error(err))
+                .catch(err => {
+                    console.error(err);
+                    window.dispatchEvent(new CustomEvent('notify', { 
+                        detail: { 
+                            type: 'error', 
+                            title: 'Error', 
+                            message: 'Failed to post comment.' 
+                        } 
+                    }));
+                })
                 .finally(() => this.loading = false);
+            },
+            deleteComment(id, url) {
+                if (!confirm('Delete this comment?')) return;
+                
+                fetch(url, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.count = data.count;
+                    const el = document.getElementById('comment-' + id);
+                    if (el) el.remove();
+                    
+                    window.dispatchEvent(new CustomEvent('notify', { 
+                        detail: { 
+                            type: 'success', 
+                            title: 'Deleted', 
+                            message: data.message 
+                        } 
+                    }));
+                })
+                .catch(err => {
+                    console.error(err);
+                     window.dispatchEvent(new CustomEvent('notify', { 
+                        detail: { 
+                            type: 'error', 
+                            title: 'Error', 
+                            message: 'Failed to delete comment.' 
+                        } 
+                    }));
+                });
             }
         }">
             <h3 class="text-2xl font-bold text-white mb-6">Comments (<span x-text="count"></span>)</h3>
