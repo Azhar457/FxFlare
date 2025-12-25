@@ -42,6 +42,15 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('categories', \App\Http\Controllers\Admin\CategoryController::class);
 });
 
+// Authorized Helper Routes
+Route::middleware(['auth'])->group(function() {
+    Route::post('/posts/{post:slug}/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store');
+    Route::delete('/comments/{comment}', [App\Http\Controllers\CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::post('/posts/{post:slug}/like', [App\Http\Controllers\LikeController::class, 'toggle'])->name('likes.toggle');
+});
+
+
+
 // Profile Routes
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

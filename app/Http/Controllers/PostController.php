@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use App\Services\FlashNotification;
 
 class PostController extends Controller
 {
@@ -92,8 +93,10 @@ class PostController extends Controller
             $post->tags()->sync($request->tags);
         }
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post created successfully!');
+        FlashNotification::success('Post created successfully!');
+        return redirect()->route('admin.posts.index');
     }
+
 
     /**
      * Display the specified resource.
@@ -166,8 +169,10 @@ class PostController extends Controller
             $post->tags()->detach();
         }
 
-        return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully!');
+        FlashNotification::success('Post updated successfully!');
+        return redirect()->route('admin.posts.index');
     }
+
 
     /**
      * Remove the specified resource from storage.
@@ -183,6 +188,8 @@ class PostController extends Controller
         }
         
         $post->delete();
-        return redirect()->route('admin.posts.index')->with('success', 'Post deleted successfully!');
+        FlashNotification::success('Post deleted successfully!');
+        return redirect()->route('admin.posts.index');
     }
+
 }
