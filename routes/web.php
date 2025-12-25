@@ -14,8 +14,12 @@ Route::get('/', function () {
 Route::get('/news', [NewsController::class, 'index'])->name('news.index');
 Route::get('/news/{post:slug}', [NewsController::class, 'show'])->name('news.show');
 
+// Global Search
+Route::get('/search', [App\Http\Controllers\SearchController::class, 'index'])->name('search.index');
+
 // Auth Routes
 Route::middleware('guest')->group(function () {
+
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 

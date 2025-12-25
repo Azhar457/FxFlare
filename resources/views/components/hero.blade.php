@@ -22,17 +22,57 @@
             Get real-time financial news, sentiment analysis, and smart summaries tailored for traders.
         </p>
 
-        <div class="max-w-2xl mx-auto relative group">
+        <div class="max-w-2xl mx-auto relative group" 
+             x-data="{ 
+                query: '', 
+                results: [], 
+                open: false,
+                search() {
+                    if (this.query.length < 2) { 
+                        this.results = []; 
+                        this.open = false; 
+                        return; 
+                    }
+                    fetch(`{{ route('search.index') }}?query=${this.query}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            this.results = data;
+                            this.open = true;
+                        });
+                }
+             }"
+             @click.away="open = false">
             <div
                 class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full opacity-20 group-hover:opacity-40 transition duration-500 blur">
             </div>
+            
+            <!-- Input Area -->
             <div class="relative flex items-center">
-                <input type="text" placeholder="Search markets, news, or analysis..."
+                <input type="text" x-model="query" @input.debounce.300ms="search()" 
+                    placeholder="Search news..."
                     class="w-full bg-[#1E1E1E] border border-gray-700 text-white rounded-full py-4 pl-8 pr-32 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent shadow-2xl text-lg placeholder-gray-500 transition-all">
                 <button
                     class="absolute right-2 top-2 bottom-2 bg-accent hover:bg-purple-600 text-white rounded-full px-8 font-semibold transition-all shadow-lg hover:shadow-purple-500/25">
                     Search
                 </button>
+            </div>
+
+            <!-- Dropdown Results -->
+            <div x-show="open && results.length > 0" 
+                 x-transition
+                 style="display: none;"
+                 class="absolute top-16 left-0 right-0 bg-darkcard border border-gray-800 rounded-xl shadow-2xl overflow-hidden z-50">
+                <template x-for="result in results" :key="result.url">
+                    <a :href="result.url" class="block px-4 py-3 hover:bg-gray-800 border-b border-gray-800/50 last:border-0 transition text-left">
+                        <div class="text-white font-medium text-sm" x-text="result.title"></div>
+                        <div class="text-xs text-accent mt-1" x-text="result.category"></div>
+                    </a>
+                </template>
+            </div>
+            
+            <div x-show="open && results.length === 0 && query.length >= 2" 
+                 class="absolute top-16 left-0 right-0 bg-darkcard border border-gray-800 rounded-xl shadow-xl p-4 text-gray-500 z-50">
+                No news found.
             </div>
         </div>
 
