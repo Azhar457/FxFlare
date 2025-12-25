@@ -98,21 +98,60 @@
         </div>
 
         <!-- Comments Section -->
-        <div class="mt-12 pt-8 border-t border-gray-800">
-            <h3 class="text-2xl font-bold text-white mb-6">Comments ({{ $post->comments->count() }})</h3>
+        <div class="mt-12 pt-8 border-t border-gray-800" x-data="{ 
+            count: {{ $post->comments->count() }},
+            loading: false,
+            body: '',
+            commentsList: null,
+            submitComment() {
+                if (this.body.trim() === '') return;
+                this.loading = true;
+                
+                fetch('{{ route('comments.store', $post) }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({ body: this.body })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    this.body = '';
+                    this.count = data.count;
+                    // Append new comment HTML
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = data.html;
+                    document.getElementById('comments-container').prepend(tempDiv.firstElementChild);
+                })
+                .catch(err => console.error(err))
+                .finally(() => this.loading = false);
+            }
+        }">
+            <h3 class="text-2xl font-bold text-white mb-6">Comments (<span x-text="count"></span>)</h3>
             
             <!-- Comment Form -->
             @auth
-                <form action="{{ route('comments.store', $post) }}" method="POST" class="mb-10">
-                    @csrf
+                <form @submit.prevent="submitComment()" class="mb-10">
                     <div class="mb-4">
                         <label for="body" class="sr-only">Leave a comment</label>
-                        <textarea name="body" id="body" rows="3" 
+                        <textarea x-model="body" rows="3" 
                             class="w-full bg-darkcard border border-gray-700 rounded-xl p-4 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent placeholder-gray-500"
                             placeholder="Share your thoughts..." required></textarea>
                     </div>
-                    <div class="flex justify-end">
-                        <button type="submit" class="bg-accent hover:bg-accent/80 text-white font-bold py-2 px-6 rounded-lg transition duration-200">
+                    <div class="flex justify-end items-center gap-4">
+                        <!-- Skeleton Loader (visible when loading) -->
+                        <div x-show="loading" class="flex gap-2 items-center text-gray-400 text-sm">
+                            <svg class="animate-spin h-4 w-4 text-accent" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Posting...
+                        </div>
+                        
+                        <button type="submit" :disabled="loading" class="bg-accent hover:bg-accent/80 text-white font-bold py-2 px-6 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             Post Comment
                         </button>
                     </div>
@@ -127,40 +166,25 @@
             @endauth
 
             <!-- Comments List -->
-            <div class="space-y-6">
+            <div id="comments-container" class="space-y-6">
+                 <!-- Skeleton for new comment (optional, but requested) -->
+                 <div x-show="loading" class="flex gap-4 animate-pulse">
+                     <div class="flex-shrink-0">
+                         <div class="w-10 h-10 rounded-full bg-gray-700"></div>
+                     </div>
+                     <div class="flex-grow">
+                         <div class="bg-darkcard border border-gray-800 rounded-xl p-4 space-y-3">
+                             <div class="h-4 bg-gray-700 rounded w-1/4"></div>
+                             <div class="h-3 bg-gray-700 rounded w-full"></div>
+                             <div class="h-3 bg-gray-700 rounded w-2/3"></div>
+                         </div>
+                     </div>
+                 </div>
+
                 @forelse($post->comments as $comment)
-                    <div class="flex gap-4">
-                        <div class="flex-shrink-0">
-                            <div class="w-10 h-10 rounded-full bg-gray-800 border border-gray-700 flex items-center justify-center text-gray-400 font-bold">
-                                {{ substr($comment->user->name, 0, 1) }}
-                            </div>
-                        </div>
-                        <div class="flex-grow">
-                            <div class="bg-darkcard border border-gray-800 rounded-xl p-4">
-                                <div class="flex justify-between items-start mb-2">
-                                    <div>
-                                        <h5 class="font-bold text-white text-sm">{{ $comment->user->name }}</h5>
-                                        <span class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
-                                    </div>
-                                    
-                                    @if(auth()->id() === $comment->user_id || (auth()->user() && auth()->user()->role->name === 'admin'))
-                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST" onsubmit="return confirm('Delete this comment?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-gray-500 hover:text-red-500 transition">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                </svg>
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                                <p class="text-gray-300 text-sm whitespace-pre-line">{{ $comment->body }}</p>
-                            </div>
-                        </div>
-                    </div>
+                    @include('news.partials.comment-item', ['comment' => $comment])
                 @empty
-                    <p class="text-gray-500 italic">No comments yet. Be the first to share your thoughts!</p>
+                    <p class="text-gray-500 italic" x-show="count == 0 && !loading">No comments yet. Be the first to share your thoughts!</p>
                 @endforelse
             </div>
         </div>
