@@ -127,7 +127,7 @@
                 <!-- Image -->
                 <div>
                     <label for="thumbnail" class="block text-sm font-medium text-gray-400 mb-2">Thumbnail Image</label>
-                    <input type="file" name="thumbnail" id="thumbnail" accept="image/*"
+                    <input type="file" name="thumbnail" id="thumbnail" accept="image/png, image/jpeg, image/gif"
                         class="w-full bg-darkbg border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent-hover">
                     @error('thumbnail') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
                 </div>

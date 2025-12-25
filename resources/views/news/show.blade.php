@@ -35,7 +35,7 @@
 
         @if($post->thumbnail)
             <div class="rounded-xl overflow-hidden mb-10 border border-gray-800">
-                <img src="{{ Storage::url($post->thumbnail) }}" alt="{{ $post->title }}" class="w-full h-auto object-cover">
+                <img src="{{ Storage::url($post->thumbnail) }}" alt="{{ $post->title }}" class="w-full max-h-[500px] object-cover">
             </div>
         @endif
 

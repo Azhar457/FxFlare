@@ -133,7 +133,7 @@
                             <img src="{{ Storage::url($post->thumbnail) }}" alt="Current Image" class="h-32 rounded">
                         </div>
                     @endif
-                    <input type="file" name="thumbnail" id="thumbnail" accept="image/*"
+                    <input type="file" name="thumbnail" id="thumbnail" accept="image/png, image/jpeg, image/gif"
                         class="w-full bg-darkbg border border-gray-700 text-white rounded-lg px-4 py-3 focus:outline-none focus:border-accent transition file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-accent file:text-white hover:file:bg-accent-hover">
                     <p class="text-xs text-gray-500 mt-1">Leave empty to keep current image.</p>
                     @error('thumbnail') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
