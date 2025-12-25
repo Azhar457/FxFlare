@@ -28,6 +28,7 @@ class SearchController extends Controller
                 return [
                     'title' => $post->title,
                     'category' => $post->category->name,
+                    'image' => $post->thumbnail ? \Illuminate\Support\Facades\Storage::url($post->thumbnail) : null,
                     'url' => route('news.show', $post)
                 ];
             });

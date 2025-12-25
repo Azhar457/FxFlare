@@ -63,9 +63,14 @@
                  style="display: none;"
                  class="absolute top-16 left-0 right-0 bg-darkcard border border-gray-800 rounded-xl shadow-2xl overflow-hidden z-50">
                 <template x-for="result in results" :key="result.url">
-                    <a :href="result.url" class="block px-4 py-3 hover:bg-gray-800 border-b border-gray-800/50 last:border-0 transition text-left">
-                        <div class="text-white font-medium text-sm" x-text="result.title"></div>
-                        <div class="text-xs text-accent mt-1" x-text="result.category"></div>
+                    <a :href="result.url" class="flex items-center gap-3 px-4 py-3 bg-gray-800 hover:bg-gray-900 border-b border-gray-800/50 last:border-0 transition text-left">
+                        <template x-if="result.image">
+                            <img :src="result.image" alt="Thumbnail" class="w-10 h-10 object-cover rounded flex-shrink-0">
+                        </template>
+                        <div>
+                            <div class="text-white font-medium text-sm" x-text="result.title"></div>
+                            <div class="text-xs text-accent mt-1" x-text="result.category"></div>
+                        </div>
                     </a>
                 </template>
             </div>
