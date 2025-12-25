@@ -42,7 +42,7 @@
                              x-transition
                              style="display: none;"
                              class="absolute right-0 mt-2 w-48 bg-darkcard border border-gray-800 rounded-xl shadow-xl overflow-hidden z-50">
-                            <a href="#" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Profile</a>
+                            <a href="profile" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Profile</a>
                             @if(Auth::user()->role->name === 'admin')
                                 <a href="{{ route('admin.index') }}" class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Dashboard</a>
                             @endif
