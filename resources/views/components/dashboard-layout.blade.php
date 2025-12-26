@@ -11,6 +11,86 @@
 
 <body class="bg-gray-900 text-white font-sans antialiased">
 
+    <!-- Toast Notification System -->
+    <div x-data="{ 
+            notifications: [],
+            add(e) {
+                this.notifications.push({
+                    id: Date.now(),
+                    type: e.detail.type || 'info',
+                    title: e.detail.title || 'Info',
+                    message: e.detail.message,
+                    show: true
+                });
+            },
+            remove(id) {
+                const index = this.notifications.findIndex(n => n.id === id);
+                if (index > -1) {
+                    this.notifications[index].show = false;
+                    setTimeout(() => {
+                        this.notifications = this.notifications.filter(n => n.id !== id);
+                    }, 300);
+                }
+            }
+        }"
+        @notify.window="add($event)"
+        class="fixed top-5 right-5 z-50 w-full max-w-sm space-y-4 pointer-events-none">
+        
+        <!-- Server-side Session Flash -->
+        @if(session('notification') || session('success') || session('error'))
+            <div x-init="
+                $dispatch('notify', { 
+                    type: '{{ session('error') ? 'error' : (session('success') ? 'success' : 'info') }}',
+                    title: '{{ session('error') ? 'Error' : (session('success') ? 'Success' : 'Info') }}',
+                    message: '{{ session('error') ?? session('success') ?? session('notification')['message'] ?? '' }}' 
+                })
+            "></div>
+        @endif
+
+        <template x-for="note in notifications" :key="note.id">
+            <div x-show="note.show"
+                 x-init="setTimeout(() => remove(note.id), 5000)"
+                 x-transition:enter="transform ease-out duration-300 transition"
+                 x-transition:enter-start="translate-y-2 opacity-0 sm:translate-y-0 sm:translate-x-2"
+                 x-transition:enter-end="translate-y-0 opacity-100 sm:translate-x-0"
+                 x-transition:leave="transition ease-in duration-100"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="pointer-events-auto w-full max-w-sm overflow-hidden rounded-lg shadow-lg border backdrop-blur-md"
+                 :class="{
+                    'bg-green-500/10 border-green-500/50 text-green-400': note.type === 'success',
+                    'bg-red-500/10 border-red-500/50 text-red-400': note.type === 'error',
+                    'bg-yellow-500/10 border-yellow-500/50 text-yellow-400': note.type === 'warning',
+                    'bg-blue-500/10 border-blue-500/50 text-blue-400': note.type === 'info'
+                 }"
+                 role="alert">
+                <div class="p-4">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <!-- Icons based on type -->
+                            <svg x-show="note.type === 'success'" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg x-show="note.type === 'error'" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg x-show="note.type === 'info'" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                            <svg x-show="note.type === 'warning'" class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        </div>
+                        <div class="ml-3 w-0 flex-1 pt-0.5">
+                            <p class="text-sm font-medium" x-text="note.title"></p>
+                            <p class="mt-1 text-sm opacity-90" x-text="note.message"></p>
+                        </div>
+                        <div class="ml-4 flex flex-shrink-0">
+                            <button @click="remove(note.id)" type="button" class="inline-flex rounded-md p-1.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-900 focus:ring-gray-500 hover:bg-white/10">
+                                <span class="sr-only">Close</span>
+                                <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                    <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </template>
+    </div>
+
     <div class="flex h-screen overflow-hidden">
         <!-- Sidebar -->
         <aside class="w-64 bg-gray-800 border-r border-gray-700 hidden md:flex flex-col">
