@@ -1,0 +1,34 @@
+name: Deploy ke Arenhosts 🚀
+
+on:
+  push:
+    branches:
+      - main  # Action ini hanya jalan kalau ada update di branch main
+
+jobs:
+  web-deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Ambil kodingan terbaru dari repo
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v4
+      
+      # 2. Upload file ke Hosting via FTP
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # PENTING: Tentukan folder tujuan di hosting
+          # Jika ingin upload langsung ke folder utama website, biasanya './public_html/'
+          # Jika ini subdomain atau folder khusus, sesuaikan path-nya.
+          server-dir: ./public_html/ 
+          
+          # Opsional: Jika ada file yang TIDAK ingin diupload (misal file git atau env)
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .env
