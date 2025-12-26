@@ -58,6 +58,21 @@ Route::middleware(['auth'])->group(function() {
 // Profile Routes
 Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+// Watchlist Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/watchlist', [App\Http\Controllers\WatchlistController::class, 'index'])->name('watchlist.index');
+    Route::post('/watchlist', [App\Http\Controllers\WatchlistController::class, 'store'])->name('watchlist.store');
+    Route::delete('/watchlist/{asset}', [App\Http\Controllers\WatchlistController::class, 'destroy'])->name('watchlist.destroy');
+    
+    // Asset Details
+    Route::get('/assets/{asset:symbol}', [App\Http\Controllers\AssetController::class, 'show'])->name('assets.show');
+    
+    // Price Alerts
+    Route::post('/price-alerts', [App\Http\Controllers\PriceAlertController::class, 'store'])->name('price-alerts.store');
+    Route::delete('/price-alerts/{priceAlert}', [App\Http\Controllers\PriceAlertController::class, 'destroy'])->name('price-alerts.destroy');
+});
+
 // Market Report & PDF
 Route::get('/market-report', [App\Http\Controllers\ReportController::class, 'index'])->name('reports.index');
 Route::get('/market-report/pdf', [App\Http\Controllers\ReportController::class, 'generatePdf'])->name('reports.pdf');
