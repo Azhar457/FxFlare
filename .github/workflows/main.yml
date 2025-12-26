@@ -10,29 +10,36 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
+      # 1. Ambil kodingan terbaru dari GitHub
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      # PERBAIKAN DI SINI: Ganti jadi 8.4 sesuai laptop kamu
+      # 2. Setup PHP 8.4 (Sesuai error log kamu tadi)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_mysql, bcmath, fileinfo
 
+      # 3. Install Vendor (Library PHP Laravel)
       - name: 📂 Install Composer Dependencies
         run: composer install --no-dev --optimize-autoloader --prefer-dist
 
+      # 4. Setup Node.js (Buat compile CSS/JS)
       - name: ⚡ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
       
-      - name: 🔨 Build Assets
+      # 5. Build Aset (Vite & Tailwind) & Hapus .gitignore
+      - name: 🔨 Build Assets & Prepare
         run: |
           npm install
           npm run build
           rm .gitignore
+          # Menghapus .gitignore penting biar folder vendor/ ikut terupload
 
+      # 6. Kirim ke Hosting via FTP
       - name: 🚀 Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -40,3 +47,13 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./
+          # exclude: file yang TIDAK perlu dikirim ke hosting
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            **/tests/**
+            **/storage/*.key
+            .editorconfig
+            .gitattributes
+            README.md
