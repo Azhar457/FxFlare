@@ -18,7 +18,7 @@
         </div>
 
         @if(session('success'))
-            <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-500 p-4 rounded-lg">
+            <div class="mb-6 p-4 bg-green-900/50 border border-green-800 text-green-200 rounded-lg">
                 {{ session('success') }}
             </div>
         @endif
