@@ -10,8 +10,21 @@
                 <p class="text-gray-400">Monitor your favorite market assets in real-time.</p>
             </div>
             
-            <!-- Simple Add Asset Form (Dropdown) -->
-            <div x-data="{ open: false }" class="relative">
+            <!-- Search and Sort Controls -->
+            <div class="flex items-center gap-4">
+                <form action="{{ route('watchlist.index') }}" method="GET" class="flex items-center gap-2">
+                    <input type="text" name="search" placeholder="Search..." value="{{ request('search') }}" class="bg-darkbg border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent">
+                    <select name="sort" onchange="this.form.submit()" class="bg-darkbg border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-accent">
+                        <option value="symbol" {{ request('sort') == 'symbol' ? 'selected' : '' }}>Symbol (A-Z)</option>
+                        <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>Price (High-Low)</option>
+                        <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>Price (Low-High)</option>
+                        <option value="change_desc" {{ request('sort') == 'change_desc' ? 'selected' : '' }}>Change (High-Low)</option>
+                        <option value="change_asc" {{ request('sort') == 'change_asc' ? 'selected' : '' }}>Change (Low-High)</option>
+                    </select>
+                </form>
+
+                <!-- Simple Add Asset Form (Dropdown) -->
+                <div x-data="{ open: false }" class="relative">
                 <button @click="open = !open" class="bg-accent hover:bg-accent/80 text-white font-bold py-2 px-4 rounded-lg transition duration-200 flex items-center gap-2">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -42,21 +55,23 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($watchlist as $asset)
                     <div class="bg-darkcard border border-gray-800 rounded-xl p-6 hover:border-gray-700 transition group relative">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <h3 class="text-2xl font-bold text-white">{{ $asset->symbol }}</h3>
-                                <p class="text-sm text-gray-400">{{ $asset->name }}</p>
+                        <a href="{{ route('assets.show', $asset->symbol) }}" class="block">
+                            <div class="flex justify-between items-start mb-4">
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white">{{ $asset->symbol }}</h3>
+                                    <p class="text-sm text-gray-400">{{ $asset->name }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-xl font-bold text-white">${{ number_format($asset->price, 2) }}</p>
+                                    <p class="text-sm {{ $asset->change_24h >= 0 ? 'text-green-500' : 'text-red-500' }} flex items-center justify-end gap-1">
+                                        {{ $asset->change_24h >= 0 ? '+' : '' }}{{ $asset->change_24h }}%
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $asset->change_24h >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6' }}" />
+                                        </svg>
+                                    </p>
+                                </div>
                             </div>
-                            <div class="text-right">
-                                <p class="text-xl font-bold text-white">${{ number_format($asset->price, 2) }}</p>
-                                <p class="text-sm {{ $asset->change_24h >= 0 ? 'text-green-500' : 'text-red-500' }} flex items-center justify-end gap-1">
-                                    {{ $asset->change_24h >= 0 ? '+' : '' }}{{ $asset->change_24h }}%
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $asset->change_24h >= 0 ? 'M13 7h8m0 0v8m0-8l-8 8-4-4-6 6' : 'M13 17h8m0 0v-8m0 8l-8-8-4 4-6-6' }}" />
-                                    </svg>
-                                </p>
-                            </div>
-                        </div>
+                        </a>
 
                         <!-- Remove Button (Top Right Absolute) -->
                         <form action="{{ route('watchlist.destroy', $asset) }}" method="POST" class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition">

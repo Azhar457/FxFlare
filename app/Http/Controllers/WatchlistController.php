@@ -11,9 +11,44 @@ class WatchlistController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $watchlist = Auth::user()->watchlist()->get();
+        $query = Auth::user()->watchlist();
+
+        // Search
+        if ($request->has('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%')
+                  ->orWhere('symbol', 'like', '%' . $request->search . '%');
+        }
+
+        // Sort
+        if ($request->has('sort')) {
+            switch ($request->sort) {
+                case 'name_asc':
+                    $query->orderBy('name', 'asc');
+                    break;
+                case 'name_desc':
+                    $query->orderBy('name', 'desc');
+                    break;
+                case 'price_asc':
+                    $query->orderBy('price', 'asc');
+                    break;
+                case 'price_desc':
+                    $query->orderBy('price', 'desc');
+                    break;
+                case 'change_asc':
+                    $query->orderBy('change_24h', 'asc');
+                    break;
+                case 'change_desc':
+                    $query->orderBy('change_24h', 'desc');
+                    break;
+            }
+        } else {
+            // Default sort
+            $query->orderBy('symbol', 'asc');
+        }
+
+        $watchlist = $query->get();
         // For adding new assets, we might want to see all available assets
         // This is a simple implementation; in production, you'd likely have a search endpoint.
         $allAssets = Asset::all(); 
