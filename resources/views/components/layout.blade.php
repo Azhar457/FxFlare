@@ -109,7 +109,7 @@
                 <a href="{{ route('reports.index') }}" class="hover:text-white transition">Markets</a>
                 <a href="{{ route('news.index') }}" class="hover:text-white transition">News</a>
                 <a href="#" class="hover:text-white transition">Analysis</a>
-                <a href="#" class="hover:text-white transition">Watchlist</a>
+                <a href="{{ route('watchlist.index') }}" class="hover:text-white transition">Watchlist</a>
                 <a href="#" class="hover:text-white transition text-accent">Premium</a>
             </div>
 
@@ -166,7 +166,7 @@
                 <a href="{{ route('reports.index') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Markets</a>
                 <a href="{{ route('news.index') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">News</a>
                 <a href="#" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Analysis</a>
-                <a href="#" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Watchlist</a>
+                <a href="{{ route('watchlist.index') }}" class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Watchlist</a>
                 <a href="#" class="block px-4 py-2 text-base font-medium text-accent hover:text-white hover:bg-gray-800 rounded-lg">Premium</a>
                 
                 @auth

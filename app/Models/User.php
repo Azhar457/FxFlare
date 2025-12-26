@@ -12,6 +12,8 @@ use App\Models\Role;
 use App\Models\Post;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\Asset;
+use App\Models\PriceAlert;
 
 class User extends Authenticatable {
     use HasFactory, Notifiable;
@@ -53,5 +55,13 @@ class User extends Authenticatable {
 
     public function likes() {
         return $this->hasMany(Like::class);
+    }
+
+    public function watchlist() {
+        return $this->belongsToMany(Asset::class, 'asset_user');
+    }
+
+    public function priceAlerts() {
+        return $this->hasMany(PriceAlert::class);
     }
 }
