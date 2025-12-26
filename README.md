@@ -1,59 +1,102 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# FXFLARE - AI-Powered Market Intelligence
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+![FXFLARE](https://via.placeholder.com/800x200?text=FXFLARE+Banner) <!-- Boleh diganti dengan banner asli jika ada -->
 
-## About Laravel
+**Modern Financial News Aggregator Platform** tailored for traders and investors. We provide real-time news, AI-driven sentiment analysis, and smart summaries to give you the edge in the market.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 👥 Project Team (5 Members)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Role | Responsibility |
+| :--- | :--- |
+| **Project Manager (PM)** | Project restructuring, Requirement gathering, Coordination. |
+| **Backend Dev 1** | Database Design (Migrations), Models, API Integration. |
+| **Backend Dev 2** | Authentication, CRUD Logic (Dashboard), Image Handling. |
+| **Frontend Dev 1** | Implement Dashboard Views, Integrate real data into UI. |
+| **Frontend Dev 2** | Polish Landing Page, Responsive Design, PDF Reporting UI. |
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## 🚀 Project Status
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### ✅ Completed (What has been done)
+*   **Structure Refactoring**: Codebase organized into `Auth`, `Dashboard` (Planned), and `Public` segments.
+    *   `resources/views/auth/` (Login & Register moved here).
+    *   `resources/views/components/` (Modular UI components like Hero, Carousel, Marquee).
+*   **Frontend Foundation**:
+    *   **Landing Page**: Implemented with Dark Mode, Tailwind CSS, and Alpine.js.
+    *   **Asset Management**: Migrated from CDN to **Vite** (`@vite(['resources/css/app.css', 'resources/js/app.js'])`).
+    *   **Components**: Hero (Search), Marquee (Live Prices), Carousel (News), Sentiment Analysis UI.
 
-## Laravel Sponsors
+### 📝 To-Do List (What needs to be done)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+#### **Backend Team**
+1.  **Database & Relational Models**:
+    *   Create migrations for `users`, `articles`, `categories`, `market_data`, etc. (Must have >1 relation).
+2.  **Dashboard Controller**:
+    *   Create `DashboardController` and implement Admin logic.
+3.  **CRUD Operations**:
+    *   Create, Read, Update, Delete for Articles/News.
+    *   Implement **Live Search** and **Filters**.
+4.  **Image Management**:
+    *   Upload/Delete logic with validation (MIME types, size).
+5.  **API Integration**:
+    *   Connect to external Open APIs (e.g., NewsAPI, AlphaVantage) for real market data.
+6.  **PDF Reporting**:
+    *   Generate reports for market summaries.
 
-### Premium Partners
+#### **Frontend Team**
+1.  **Dashboard UI**:
+    *   Create `resources/views/dashboard/index.blade.php`.
+    *   Implement forms for CRUD (Create Article, Edit User, etc.).
+2.  **Auth Integration**:
+    *   Connect Login/Register forms to POST routes.
+3.  **Dynamic Data**:
+    *   Replace hardcoded HTML in `home.blade.php` with dynamic Blade loops (`@foreach $articles as $article`).
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## 📂 Folder Structure Guide
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+We strictly separate concerns. Please follow this structure:
 
-## Code of Conduct
+```
+fxflare/
+├── app/
+│   ├── Http/Controllers/
+│   │   ├── Auth/           <-- AuthController (Login/Register logic)
+│   │   ├── Admin/          <-- DashboardController (Admin CRUD)
+│   │   └── HomeController.php
+├── resources/
+│   ├── views/
+│   │   ├── auth/           <-- login.blade.php, register.blade.php
+│   │   ├── dashboard/      <-- Admin views (index, create, edit)
+│   │   ├── components/     <-- Reusable UI (navbar, hero, cards)
+│   │   ├── home.blade.php  <-- Main Landing Page
+│   │   └── components/layout.blade.php  <-- Main Layout (DO NOT use CDN, use Vite)
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## 🛠 Tech Stack
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+*   **Framework**: Laravel 12
+*   **Styling**: Tailwind CSS v4 (via Vite)
+*   **Interactivity**: Alpine.js
+*   **Asset Bundler**: Vite (Run `npm run dev` locally)
+*   **Auth**: Custom (or Starter Kit modified to fit structure)
 
-## License
+## ⚡ Getting Started
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1.  **Clone Repo**: `git clone ...`
+2.  **Install PHP Deps**: `composer install`
+3.  **Install JS Deps**: `npm install`
+4.  **Setup Env**: `cp .env.example .env` and configure DB.
+5.  **Run Development**:
+    *   Terminal 1: `composer run dev` (starts Laravel server)
+    *   Terminal 2: `npm run dev` (starts Vite hot-reload)
+
+---
+
+**Note for Team**: Please respect the folder structure. Do not put everything in the root `views` folder. Use Controllers for logic, do not put logic in Routes closure.
