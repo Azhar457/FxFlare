@@ -1,34 +1,57 @@
-name: Deploy ke Arenhosts 🚀
+name: Deploy Laravel ke Arenhost
 
 on:
   push:
     branches:
-      - main  # Action ini hanya jalan kalau ada update di branch main
+      - main
 
 jobs:
   web-deploy:
-    name: Deploy
+    name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      # 1. Ambil kodingan terbaru dari repo
+      # 1. Ambil kodingan terbaru
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
+
+      # 2. Setup PHP (Biar bisa jalanin composer)
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      # 3. Install Vendor (Library PHP)
+      - name: 📂 Install Composer Dependencies
+        run: composer install --no-dev --optimize-autoloader --prefer-dist
+
+      # 4. Install Node.js & Build Aset (CSS/JS Tailwind)
+      - name: ⚡ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
       
-      # 2. Upload file ke Hosting via FTP
-      - name: 📂 Sync files
+      - name: 🔨 Build Assets
+        run: |
+          npm install
+          npm run build
+
+      # 5. Hapus .gitignore (TRIK PENTING)
+      # Kita hapus file ini supaya folder /vendor dan /public/build 
+      # yang barusan dibuat tidak dianggap "hidden" oleh uploader FTP
+      - name: 🔓 Un-ignore files
+        run: rm .gitignore
+
+      # 6. Kirim ke Hosting
+      - name: 🚀 Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # PENTING: Tentukan folder tujuan di hosting
-          # Jika ingin upload langsung ke folder utama website, biasanya './public_html/'
-          # Jika ini subdomain atau folder khusus, sesuaikan path-nya.
-          server-dir: ./public_html/ 
-          
-          # Opsional: Jika ada file yang TIDAK ingin diupload (misal file git atau env)
+          server-dir: ./
+          # exclude: meniadakan file yang tidak perlu dikirim
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
-            .env
+            **/tests/**
