@@ -1,0 +1,51 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Asset;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class WatchlistController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        $watchlist = Auth::user()->watchlist()->get();
+        // For adding new assets, we might want to see all available assets
+        // This is a simple implementation; in production, you'd likely have a search endpoint.
+        $allAssets = Asset::all(); 
+
+        return view('watchlist.index', compact('watchlist', 'allAssets'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'asset_id' => 'required|exists:assets,id',
+        ]);
+
+        $user = Auth::user();
+        
+        if (!$user->watchlist()->where('asset_id', $request->asset_id)->exists()) {
+            $user->watchlist()->attach($request->asset_id);
+            return back()->with('success', 'Asset added to watchlist.');
+        }
+
+        return back()->with('info', 'Asset is already in your watchlist.');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Asset $asset)
+    {
+        Auth::user()->watchlist()->detach($asset->id);
+        return back()->with('success', 'Asset removed from watchlist.');
+    }
+}
