@@ -17,11 +17,7 @@
             </a>
         </div>
 
-        @if(session('success'))
-            <div class="mb-6 bg-green-500/10 border border-green-500/20 text-green-500 p-4 rounded-lg">
-                {{ session('success') }}
-            </div>
-        @endif
+
 
         <div class="bg-darkcard border border-gray-800 rounded-xl overflow-hidden">
             <!-- Toolbar -->

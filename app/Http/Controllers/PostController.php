@@ -93,10 +93,8 @@ class PostController extends Controller
             $post->tags()->sync($request->tags);
         }
 
-        FlashNotification::success('Post created successfully!');
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index')->with('success', 'Post created successfully!');
     }
-
 
     /**
      * Display the specified resource.
@@ -169,8 +167,7 @@ class PostController extends Controller
             $post->tags()->detach();
         }
 
-        FlashNotification::success('Post updated successfully!');
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index')->with('success', 'Post updated successfully!');
     }
 
 
@@ -188,8 +185,7 @@ class PostController extends Controller
         }
         
         $post->delete();
-        FlashNotification::success('Post deleted successfully!');
-        return redirect()->route('admin.posts.index');
+        return redirect()->route('admin.posts.index')->with('success', 'Post deleted successfully!');
     }
 
 }
