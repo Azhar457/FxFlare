@@ -10,21 +10,18 @@ jobs:
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-      # 1. Ambil kodingan terbaru
       - name: 🚚 Get latest code
         uses: actions/checkout@v4
 
-      # 2. Setup PHP (Biar bisa jalanin composer)
+      # PERBAIKAN DI SINI: Ganti jadi 8.4 sesuai laptop kamu
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '8.4'
 
-      # 3. Install Vendor (Library PHP)
       - name: 📂 Install Composer Dependencies
         run: composer install --no-dev --optimize-autoloader --prefer-dist
 
-      # 4. Install Node.js & Build Aset (CSS/JS Tailwind)
       - name: ⚡ Setup Node.js
         uses: actions/setup-node@v4
         with:
@@ -34,14 +31,8 @@ jobs:
         run: |
           npm install
           npm run build
+          rm .gitignore
 
-      # 5. Hapus .gitignore (TRIK PENTING)
-      # Kita hapus file ini supaya folder /vendor dan /public/build 
-      # yang barusan dibuat tidak dianggap "hidden" oleh uploader FTP
-      - name: 🔓 Un-ignore files
-        run: rm .gitignore
-
-      # 6. Kirim ke Hosting
       - name: 🚀 Sync files via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -49,9 +40,3 @@ jobs:
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: ./
-          # exclude: meniadakan file yang tidak perlu dikirim
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            **/tests/**
