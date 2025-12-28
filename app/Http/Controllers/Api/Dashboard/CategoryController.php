@@ -12,13 +12,15 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::all();
+        $categories = Category::latest()->paginate(10);
         return CategoryResource::collection($categories);
     }
 
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|unique:categories,name']);
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name',
+        ]);
 
         $category = Category::create([
             'name' => $request->name,
@@ -35,7 +37,9 @@ class CategoryController extends Controller
 
     public function update(Request $request, Category $category)
     {
-        $request->validate(['name' => 'required|unique:categories,name,' . $category->id]);
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,' . $category->id,
+        ]);
 
         $category->update([
             'name' => $request->name,
@@ -48,6 +52,6 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        return response()->json(['message' => 'Kategori dihapus'], 200);
+        return response()->json(['message' => 'Category deleted successfully']);
     }
 }
