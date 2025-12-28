@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'coingecko' => [
+        'url' => env('COINGECKO_API_URL', 'https://api.coingecko.com/api/v3'),
+        'cache_ttl' => env('COINGECKO_CACHE_TTL', 300), // 5 minutes in seconds
+        'api_key' => env('COINGECKO_API_KEY', null), // Optional for free tier
+    ],
+
 ];

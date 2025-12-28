@@ -40,12 +40,12 @@
         <!-- Server-side Session Flash -->
         @if(session('notification') || session('success') || session('error'))
             <div x-init="
-                    $dispatch('notify', { 
-                        type: '{{ session('error') ? 'error' : (session('success') ? 'success' : 'info') }}',
-                        title: '{{ session('error') ? 'Error' : (session('success') ? 'Success' : 'Info') }}',
-                        message: '{{ session('error') ?? session('success') ?? session('notification')['message'] ?? '' }}' 
-                    })
-                "></div>
+                            $dispatch('notify', { 
+                                type: '{{ session('error') ? 'error' : (session('success') ? 'success' : 'info') }}',
+                                title: '{{ session('error') ? 'Error' : (session('success') ? 'Success' : 'Info') }}',
+                                message: '{{ session('error') ?? session('success') ?? session('notification')['message'] ?? '' }}' 
+                            })
+                        "></div>
         @endif
 
         <template x-for="note in notifications" :key="note.id">
@@ -260,7 +260,7 @@
             </div>
         </div>
         <div class="text-center border-t border-gray-900 pt-8">
-            © 2023 FXFLARE. All rights reserved. Financial data provided by various sources.
+            © 2025 FXFLARE. All rights reserved. Financial data provided by various sources.
             <br>
             <span class="text-xs text-gray-600 mt-2 block">FXFLARE is not a broker-dealer or investment advisor. We
                 provide information, not investment advice.</span>
