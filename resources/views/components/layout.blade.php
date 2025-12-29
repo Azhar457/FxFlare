@@ -40,12 +40,12 @@
         <!-- Server-side Session Flash -->
         @if(session('notification') || session('success') || session('error'))
             <div x-init="
-                            $dispatch('notify', { 
-                                type: '{{ session('error') ? 'error' : (session('success') ? 'success' : 'info') }}',
-                                title: '{{ session('error') ? 'Error' : (session('success') ? 'Success' : 'Info') }}',
-                                message: '{{ session('error') ?? session('success') ?? session('notification')['message'] ?? '' }}' 
-                            })
-                        "></div>
+                                    $dispatch('notify', { 
+                                        type: '{{ session('error') ? 'error' : (session('success') ? 'success' : 'info') }}',
+                                        title: '{{ session('error') ? 'Error' : (session('success') ? 'Success' : 'Info') }}',
+                                        message: '{{ session('error') ?? session('success') ?? session('notification')['message'] ?? '' }}' 
+                                    })
+                                "></div>
         @endif
 
         <template x-for="note in notifications" :key="note.id">
@@ -143,7 +143,7 @@
                         <!-- Dropdown -->
                         <div x-show="open" @click.away="open = false" x-transition style="display: none;"
                             class="absolute right-0 mt-2 w-48 bg-darkcard border border-gray-800 rounded-xl shadow-xl overflow-hidden z-50">
-                            <a href="profile"
+                            <a href="{{ route('profile.edit') }}"
                                 class="block px-4 py-2 text-sm text-gray-400 hover:bg-gray-800 hover:text-white">Profile</a>
                             @if(Auth::user()->role->name === 'admin')
                                 <a href="{{ route('admin.index') }}"
@@ -198,7 +198,7 @@
                 @auth
                     <div class="border-t border-gray-700 my-2"></div>
                     <div class="px-4 py-2 text-sm text-gray-500">Logged in as {{ Auth::user()->name }}</div>
-                    <a href="profile"
+                    <a href="{{ route('profile.edit') }}"
                         class="block px-4 py-2 text-base font-medium text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg">Profile</a>
                     @if(Auth::user()->role->name === 'admin')
                         <a href="{{ route('admin.index') }}"
